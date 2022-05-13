@@ -12,10 +12,9 @@ public class Authorization {
     private static ResultSet rs;
 
     public static boolean signUp() {
-        System.out.println("Sign up!");
-        System.out.print("Enter your username: ");
+        System.out.print("Sign up! Enter your username: ");
         String username = scanner.next();
-        System.out.print("Enter your password: ");
+        System.out.print("\t     Enter your password: ");
         String password = scanner.next();
 
         try {
@@ -31,10 +30,9 @@ public class Authorization {
         }
     }
     public static boolean login() {
-        System.out.println("Login!");
-        System.out.print("Enter your username: ");
+        System.out.print("Login! Enter your username: ");
         String username = scanner.next();
-        System.out.print("Enter your password: ");
+        System.out.print("\t   Enter your password: ");
         String password = scanner.next();
 
         try {

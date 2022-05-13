@@ -15,29 +15,10 @@ public class Controller {
     static PreparedStatement ps;
     static ResultSet rs;
 
-    public static void showTasks() {
-        System.out.print("Enter the username: ");
-        String username = scanner.nextLine();
-
-        try {
-            ps = getConnection().prepareStatement("SELECT id, task, deadline, acomplishment FROM todolist WHERE username='" + username + "'");
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                System.out.println(rs.getString(1));
-                System.out.println(rs.getString(2));
-                System.out.println(rs.getString(3));
-                System.out.println(rs.getString(4));
-                System.out.println("-------------------------");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     public static void addTask() {
         System.out.print("Enter to do list's task: ");
         String task = scanner.nextLine();
-        System.out.print("Your username: ");
+        System.out.print("Enter your username: ");
         String username = scanner.nextLine();
         System.out.print("Enter date to accomplish (yyyy-mm-dd): ");
         String deadline= scanner.nextLine();
@@ -52,18 +33,6 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    public static void deleteTask() {
-        System.out.print("Delete task by id: ");
-        int id = scanner.nextInt();
-
-        try {
-            ps = getConnection().prepareStatement("DELETE FROM todolist WHERE id=" + id);
-            ps.execute();
-            System.out.println("Task deleted successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     public static void editTask() {
         System.out.print("Enter the id to change: ");
         int id = scanner.nextInt();
@@ -74,6 +43,18 @@ public class Controller {
             ps = getConnection().prepareStatement("UPDATE todolist SET task='" + task + "'WHERE id=" + id);
             ps.execute();
             System.out.println("Changed successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void deleteTask() {
+        System.out.print("Delete task by id: ");
+        int id = scanner.nextInt();
+
+        try {
+            ps = getConnection().prepareStatement("DELETE FROM todolist WHERE id=" + id);
+            ps.execute();
+            System.out.println("Task deleted successfully");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -98,6 +79,7 @@ public class Controller {
 
         Date today = Date.valueOf(LocalDate.now());
         LocalDate today2 = LocalDate.now();
+
         try {
             ps = getConnection().prepareStatement("SELECT id, task, deadline, acomplishment FROM todolist WHERE username='" + username + "'");
             rs = ps.executeQuery();
@@ -107,12 +89,12 @@ public class Controller {
                 LocalDate date2 = rs.getDate(3).toLocalDate();
                 String task = rs.getString(2);
                 Period diff = Period.between(today2, date2);
-                if (date.equals(today)) {
-                    System.out.println(task  + " task have to be done today" + " ("+ diff.getDays() + " days)");
-                } else if (date.after(today)) {
-                    System.out.println(task + " task have to be done within " + "in " + diff.getDays() + " days " + "(" + date +")");
+                if (date.equals(today) && rs.getString(4).equals("f")) {
+                    System.out.println("Task " + task.toUpperCase() + " have to be done today.");
+                } else if (date.after(today) && rs.getString(4).equals("f")) {
+                    System.out.println("Task " + task.toUpperCase() + " have to be done within " + diff.getDays() + " day/-s " + "(" + date +").");
                 } else if (date.before(today) && rs.getString(4).equals("f")) {
-                    System.out.println(task + " task have been passed without fulfillment " + "in " + diff.getDays() + " days" + " (" + date + ")");
+                    System.out.println("Task " + task.toUpperCase() + " have been passed " + "in " + Math.abs(diff.getDays()) + " day/-s" + " (" + date + ").");
                 }
             }
         } catch (SQLException e) {
