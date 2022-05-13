@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class ToDoAuth {
+public class Authorization {
     static Scanner scanner = new Scanner(System.in);
     private static PreparedStatement ps;
     private static ResultSet rs;
@@ -29,8 +29,7 @@ public class ToDoAuth {
         }
     }
     public static boolean login() {
-        System.out.println("Login!");
-        System.out.print("\t   Enter your username: ");
+        System.out.print("Login! Enter your username: ");
         String username = scanner.next();
         System.out.print("\t   Enter your password: ");
         String password = scanner.next();
@@ -42,6 +41,7 @@ public class ToDoAuth {
             String urn = null, psw = null;
 
             while (rs.next()) {
+
                 urn = rs.getString("username");
                 psw = rs.getString("password");
 
@@ -56,5 +56,6 @@ public class ToDoAuth {
         }
         return false;
     }
+
 
 }

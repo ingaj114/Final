@@ -1,18 +1,14 @@
 package com.company;
 
-import com.sun.org.apache.bcel.internal.generic.LoadClass;
-
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Year;
-import java.time.chrono.ChronoLocalDate;
-import java.util.Locale;
+import java.time.Period;
 import java.util.Scanner;
 import static com.company.DbConnection.getConnection;
-public class ToDoController {
+public class Controller {
 
     static Scanner scanner = new Scanner(System.in);
     static PreparedStatement ps;
@@ -23,13 +19,14 @@ public class ToDoController {
         String username = scanner.nextLine();
 
         try {
-            ps = getConnection().prepareStatement("SELECT id, task, date FROM todolist WHERE username='" + username + "'");
+            ps = getConnection().prepareStatement("SELECT id, task, deadline, acomplishment FROM todolist WHERE username='" + username + "'");
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 System.out.println(rs.getString(1));
                 System.out.println(rs.getString(2));
                 System.out.println(rs.getString(3));
+                System.out.println(rs.getString(4));
                 System.out.println("-------------------------");
             }
         } catch (SQLException e) {
@@ -42,10 +39,12 @@ public class ToDoController {
         System.out.print("Your username: ");
         String username = scanner.nextLine();
         System.out.print("Enter date to accomplish (yyyy-mm-dd): ");
-        String date = scanner.nextLine();
+        String deadline= scanner.nextLine();
+        System.out.print("Finished or not (yes/no)? ");
+        String accomplish = scanner.nextLine();
 
         try {
-            ps = getConnection().prepareStatement("INSERT INTO todolist(username, task, date) VALUES('" + username + "','" + task + "','" + date + "')");
+            ps = getConnection().prepareStatement("INSERT INTO todolist(username, task, deadline, acomplishment) VALUES('" + username + "','" + task + "','" + deadline + "','" + accomplish + "')");
             ps.execute();
             System.out.println("Task added successfully");
         } catch (SQLException e) {
@@ -78,23 +77,42 @@ public class ToDoController {
             e.printStackTrace();
         }
     }
-    public static ToDoObject pendingTasks() {
+    public static void editDate() {
+        System.out.print("Enter the id to change: ");
+        int id = scanner.nextInt();
+        System.out.print("Enter a date (yyyy-mm-dd): ");
+        String task = scanner.next();
+
+        try {
+            ps = getConnection().prepareStatement("UPDATE todolist SET deadline='" + task + "'WHERE id=" + id);
+            ps.execute();
+            System.out.println("Changed successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static Object pendingTasks() {
         System.out.print("Enter the username: ");
         String username = scanner.nextLine();
 
         Date today = Date.valueOf(LocalDate.now());
+        LocalDate today2 = LocalDate.now();
         try {
-            ps = getConnection().prepareStatement("SELECT id, task, date FROM todolist WHERE username='" + username + "'");
+            ps = getConnection().prepareStatement("SELECT id, task, deadline, acomplishment FROM todolist WHERE username='" + username + "'");
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 Date date = rs.getDate(3);
+                LocalDate date2 = rs.getDate(3).toLocalDate();
                 String task = rs.getString(2);
+                Period diff = Period.between(today2, date2);
                 if (date.equals(today)) {
-                    System.out.println(task  + " task HAVE TO BE DONE today ");
+                    System.out.println(task  + " task have to be done today" + " ("+ diff.getDays() + " days)");
                 } else if (date.after(today)) {
-                    System.out.println(task + " task HAVE TO BE DONE within " + date);
-                } else System.out.println(task + " task is due date " + date);
+                    System.out.println(task + " task have to be done within " + "in " + diff.getDays() + " days " + "(" + date +")");
+                } else if (date.before(today) && rs.getString(4).equals("f")) {
+                    System.out.println(task + " task have been passed without fulfillment " + "in " + diff.getDays() + " days" + " (" + date + ")");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
