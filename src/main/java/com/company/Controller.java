@@ -1,5 +1,6 @@
 package com.company;
 
+import static com.company.DbConnection.getConnection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,7 +8,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
-import static com.company.DbConnection.getConnection;
+
 public class Controller {
 
     static Scanner scanner = new Scanner(System.in);
