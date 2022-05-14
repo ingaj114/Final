@@ -132,7 +132,7 @@ public class Controller {
         }
     }
 
-    public static void pendingTasks() {
+    public static List<TaskObject> pendingTasks() {
 
         Date today = Date.valueOf(LocalDate.now());
         LocalDate today2 = LocalDate.now();
@@ -157,6 +157,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
     public static List<TaskObject> getPendingTasks() {
 
@@ -178,6 +179,14 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static void printPendingTasks(List<TaskObject> tasks) {
+        System.out.println("Pending tasks: ");
+        for (TaskObject task : tasks) {
+            System.out.printf("Task ID = %s, username = %s, taskname = %s, deadline = %s, acomplishment = %s\n",
+                    task.getId(), task.getUsername(), task.getTask(), task.getDeadline(), task.isAcomplishment());
         }
     }
 

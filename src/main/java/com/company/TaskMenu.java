@@ -8,8 +8,8 @@ public class TaskMenu {
 
         Scanner sc = new Scanner(System.in);
         System.out.println("What do you want to do? ");
-        System.out.println("\t1. Add task (all fields): ");
-        System.out.println("\t2. Edit task by id (all fields): ");
+        System.out.println("\t1. Add task: ");
+        System.out.println("\t2. Edit task by id: ");
         System.out.println("\t3. Delete task by id: ");
         System.out.println("\t4. Get task by id: ");
         System.out.println("\t5. Tasks that are pending or passed without fulfilment (by username):");
@@ -33,7 +33,7 @@ public class TaskMenu {
                 Controller.pendingTasks();
                 break;
             case 6:
-                System.out.println(Controller.getPendingTasks());
+                Controller.printPendingTasks(Controller.getPendingTasks());
                 break;
             default:
                 System.out.println("Invalid option, try again!");
