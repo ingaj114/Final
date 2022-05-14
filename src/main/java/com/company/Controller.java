@@ -109,20 +109,7 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    public static void editDate() {
-        System.out.print("Enter the id to edit: ");
-        int id = scanner.nextInt();
-        System.out.print("Enter a date (yyyy-mm-dd): ");
-        String task = scanner.next();
 
-        try {
-            ps = getConnection().prepareStatement("UPDATE todolist SET deadline='" + task + "'WHERE id=" + id + "AND username='" + username + "'");
-            ps.execute();
-            System.out.println("Changed successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     public static void pendingTasks() {
 
         Date today = Date.valueOf(LocalDate.now());
