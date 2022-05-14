@@ -149,16 +149,16 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    public static List<TaskObj> getPendingTasks() {
+    public static List<TaskObject> getPendingTasks() {
 
         try {
             ps = getConnection().prepareStatement("SELECT * FROM todolist WHERE deadline > NOW() AND acomplishment is false;");
             rs = ps.executeQuery();
 
-            List<TaskObj> pendingTasks = new ArrayList<>();
+            List<TaskObject> pendingTasks = new ArrayList<>();
 
             while (rs.next()) {
-                pendingTasks.add(new TaskObj(
+                pendingTasks.add(new TaskObject(
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("task"),
@@ -171,4 +171,5 @@ public class Controller {
             return null;
         }
     }
+
 }

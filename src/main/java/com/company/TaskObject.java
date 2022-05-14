@@ -2,7 +2,7 @@ package com.company;
 
 import java.util.Date;
 
-public class TaskObj {
+public class TaskObject {
     // define the properties
     private int id;
     private String username;
@@ -12,10 +12,10 @@ public class TaskObj {
 
     //constructor
 
-    public TaskObj() {
+    public TaskObject() {
     }
 
-    public TaskObj(int id, String username, String task, Date deadline, boolean acomplishment) {
+    public TaskObject(int id, String username, String task, Date deadline, boolean acomplishment) {
         this.id = id;
         this.username = username;
         this.task = task;

@@ -8,11 +8,11 @@ public class TaskMenu {
 
         Scanner sc = new Scanner(System.in);
         System.out.println("What do you want to do? ");
-        System.out.println("\t1. Add task: ");
-        System.out.println("\t2. Edit task by id: ");
+        System.out.println("\t1. Add task (all fields): ");
+        System.out.println("\t2. Edit task by id (all fields): ");
         System.out.println("\t3. Delete task by id: ");
-        System.out.println("\t4. Show tasks that are pending or passed (by username):");
-        System.out.println("\t5. Show tasks that are pending or passed (all of them by list):");
+        System.out.println("\t4. Tasks that are pending or passed without fulfilment (by username):");
+        System.out.println("\t5. Tasks that are pending or passed without fulfilment (all of them by list):");
         int option = sc.nextInt();
 
         switch (option) {
