@@ -2,8 +2,9 @@ package com.company;
 
 import java.util.Scanner;
 
-public class Menu {
+public class TaskMenu {
     public static void menu() {
+
         Scanner sc = new Scanner(System.in);
         System.out.println("\t1. Add task: ");
         System.out.println("\t2. Edit task by id: ");

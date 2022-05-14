@@ -73,7 +73,7 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    public static Object pendingTasks() {
+    public static void pendingTasks() {
         System.out.print("Enter the username: ");
         String username = scanner.nextLine();
 
@@ -99,9 +99,7 @@ public class Controller {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
         }
-        return null;
     }
 
 }

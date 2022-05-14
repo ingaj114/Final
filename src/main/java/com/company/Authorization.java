@@ -22,13 +22,16 @@ public class Authorization {
                     "VALUES('" + username + "','" + password + "')");
             ps.execute();
             System.out.println("Sign up was successful!");
+            Authorization.login();
             return true;
         } catch (SQLException e) {
             System.out.println("Username already exists. Try again!");
-            e.getMessage();
+            Authorization.signUp();
             return false;
         }
     }
+
+
     public static boolean login() {
         System.out.print("Login! Enter your username: ");
         String username = scanner.next();
@@ -39,24 +42,29 @@ public class Authorization {
             ps = getConnection().prepareStatement("SELECT username, password FROM users WHERE password IN('" + username + "','" + password + "')");
             rs = ps.executeQuery();
 
-            String urn = null, psw = null;
+            String usernameObj, passwordObj;
 
             while (rs.next()) {
 
-                urn = rs.getString("username");
-                psw = rs.getString("password");
+                usernameObj = rs.getString("username");
+                passwordObj = rs.getString("password");
 
-                if (urn.equalsIgnoreCase(username) && psw.equals(password)) {
+                if (usernameObj.equalsIgnoreCase(username) && passwordObj.equals(password)) {
+                    System.out.println("Login successful!");
+                    TaskMenu.menu();
                     return true;
-                } else {
+                } else if (usernameObj.equals(username) && !passwordObj.equals(password)) {
+                    System.out.println("Password does not match the username. Try again!");
+                    Authorization.login();
                     return false;
                 }
             }
         } catch (SQLException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
+        System.out.println("Invalid login credentials. Try again!");
+        Authorization.login();
         return false;
     }
-
 
 }
