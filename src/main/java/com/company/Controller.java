@@ -94,7 +94,6 @@ public class Controller {
                 editTask();
         }
         return true;
-
     }
 
     public static void deleteTask() {
@@ -107,6 +106,29 @@ public class Controller {
             System.out.println("Task deleted successfully");
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static TaskObject getTask() {
+        System.out.print("Enter task's id: ");
+        int id = scanner.nextInt();
+
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM todolist WHERE id =" + id);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new TaskObject(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("task"),
+                        rs.getDate("deadline"),
+                        rs.getBoolean("acomplishment"));
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

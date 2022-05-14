@@ -11,8 +11,9 @@ public class TaskMenu {
         System.out.println("\t1. Add task (all fields): ");
         System.out.println("\t2. Edit task by id (all fields): ");
         System.out.println("\t3. Delete task by id: ");
-        System.out.println("\t4. Tasks that are pending or passed without fulfilment (by username):");
-        System.out.println("\t5. Tasks that are pending or passed without fulfilment (all of them by list):");
+        System.out.println("\t4. Get task by id: ");
+        System.out.println("\t5. Tasks that are pending or passed without fulfilment (by username):");
+        System.out.println("\t6. Tasks that are pending or passed without fulfilment (all of them by list):");
         int option = sc.nextInt();
 
         switch (option) {
@@ -26,9 +27,12 @@ public class TaskMenu {
                 Controller.deleteTask();
                 break;
             case 4:
-                Controller.pendingTasks();
+                System.out.println(Controller.getTask());
                 break;
             case 5:
+                Controller.pendingTasks();
+                break;
+            case 6:
                 System.out.println(Controller.getPendingTasks());
                 break;
             default:
