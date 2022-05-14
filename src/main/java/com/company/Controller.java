@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Controller {
@@ -14,15 +16,14 @@ public class Controller {
     static Scanner scanner = new Scanner(System.in);
     static PreparedStatement ps;
     static ResultSet rs;
+    static String username = Authorization.username;
 
     public static void addTask() {
         System.out.print("Enter to do list's task: ");
         String task = scanner.nextLine();
-        System.out.print("Enter your username: ");
-        String username = scanner.nextLine();
         System.out.print("Enter date to accomplish (yyyy-mm-dd): ");
         String deadline= scanner.nextLine();
-        System.out.print("Finished or not (yes/no)? ");
+        System.out.print("Finished or not finished (yes/no) ? ");
         String accomplish = scanner.nextLine();
 
         try {
@@ -33,20 +34,69 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    public static void editTask() {
-        System.out.print("Enter the id to change: ");
-        int id = scanner.nextInt();
-        System.out.print("Enter a task: ");
-        String task = scanner.next();
 
-        try {
-            ps = getConnection().prepareStatement("UPDATE todolist SET task='" + task + "'WHERE id=" + id);
-            ps.execute();
-            System.out.println("Changed successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static boolean editTask() {
+        System.out.println("Enter the id of the task that you want to edit: ");
+        int id = scanner.nextInt();
+        System.out.print("Enter what you want to update in the table: ");
+        System.out.println("\n\t1. Task name: \n" + "\t2. Task deadline: \n" + "\t3. Task accomplishment status: \n" + "\t4. All of the above:");
+        int option = scanner.nextInt();
+        switch (option) {
+            case 1:
+                System.out.print("Enter the new name of the task: ");
+                String task = scanner.next(); // doesn't work with .nextLine()
+                try {
+                    ps = getConnection().prepareStatement("UPDATE todolist SET task='" + task + "' WHERE id=" + id);
+                    ps.execute();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case 2:
+                System.out.print("Enter the deadline for a task (format: YYYY-MM-DD): ");
+                String taskDate = scanner.next();
+                try {
+                    ps = getConnection().prepareStatement("UPDATE todolist SET deadline=DATE '"+ taskDate + "' WHERE id=" + id);
+                    System.out.println("Deadline updated");
+                    ps.execute();
+                } catch (SQLException e) {
+                    System.out.println("Task deadline not updated.");
+                }
+                break;
+            case 3:
+                System.out.print("Enter the task accomplishment status (yes/no): ");
+                String taskStatus = scanner.next();
+                try {
+                    ps = getConnection().prepareStatement("UPDATE todolist SET acomplishment='" + taskStatus + "' WHERE id=" + id);
+                    ps.execute();
+                    System.out.println("Status updated");
+                } catch (SQLException e) {
+                    System.out.println("Task status not updated.");
+                }
+                break;
+            case 4:
+                System.out.print("Enter the new name of the task: ");
+                String taskAll = scanner.next();
+                System.out.print("Enter the deadline for a task (format: YYYY-MM-DD): ");
+                String taskDateAll = scanner.next();
+                System.out.print("Enter the task accomplishment status (yes/no): ");
+                String taskStatusAll = scanner.next();
+                try {
+                    ps = getConnection().prepareStatement("UPDATE todolist SET task='" + taskAll + "', deadline=DATE '"+ taskDateAll + "', acomplishment='" + taskStatusAll + "' WHERE id=" + id);
+                    ps.execute();
+                    System.out.println("Successfully updated");
+                } catch (SQLException e) {
+                    System.out.println("The task data is not updated.");
+                }
+                break;
+            default:
+                System.out.println("Invalid option. Try again");
+                editTask();
         }
+        return true;
+
     }
+
     public static void deleteTask() {
         System.out.print("Delete task by id: ");
         int id = scanner.nextInt();
@@ -60,13 +110,13 @@ public class Controller {
         }
     }
     public static void editDate() {
-        System.out.print("Enter the id to change: ");
+        System.out.print("Enter the id to edit: ");
         int id = scanner.nextInt();
         System.out.print("Enter a date (yyyy-mm-dd): ");
         String task = scanner.next();
 
         try {
-            ps = getConnection().prepareStatement("UPDATE todolist SET deadline='" + task + "'WHERE id=" + id);
+            ps = getConnection().prepareStatement("UPDATE todolist SET deadline='" + task + "'WHERE id=" + id + "AND username='" + username + "'");
             ps.execute();
             System.out.println("Changed successfully");
         } catch (SQLException e) {
@@ -74,8 +124,6 @@ public class Controller {
         }
     }
     public static void pendingTasks() {
-        System.out.print("Enter the username: ");
-        String username = scanner.nextLine();
 
         Date today = Date.valueOf(LocalDate.now());
         LocalDate today2 = LocalDate.now();
@@ -101,5 +149,26 @@ public class Controller {
             e.printStackTrace();
         }
     }
+    public static List<TaskObj> getPendingTasks() {
 
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM todolist WHERE deadline > NOW() AND acomplishment is false;");
+            rs = ps.executeQuery();
+
+            List<TaskObj> pendingTasks = new ArrayList<>();
+
+            while (rs.next()) {
+                pendingTasks.add(new TaskObj(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("task"),
+                        rs.getDate("deadline"),
+                        rs.getBoolean("acomplishment")));
+            }
+            return pendingTasks;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

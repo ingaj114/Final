@@ -10,6 +10,7 @@ public class Authorization {
     static Scanner scanner = new Scanner(System.in);
     private static PreparedStatement ps;
     private static ResultSet rs;
+    public static String username;
 
     public static boolean signUp() {
         System.out.print("Sign up! Enter your username: ");
@@ -31,10 +32,9 @@ public class Authorization {
         }
     }
 
-
     public static boolean login() {
         System.out.print("Login! Enter your username: ");
-        String username = scanner.next();
+        Authorization.username = scanner.next();
         System.out.print("\t   Enter your password: ");
         String password = scanner.next();
 

@@ -8,7 +8,7 @@ public class LoginMenu {
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome in the ToDo App! Choose an option:");
         System.out.println("\t1. Login: ");
-        System.out.print("\t2. Sign up: ");
+        System.out.println("\t2. Sign up: ");
         int option = sc.nextInt();
 
         switch (option) {

@@ -1,17 +1,18 @@
 package com.company;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class TaskMenu {
-    public static void menu() {
+    public static void menu() throws SQLException {
 
         Scanner sc = new Scanner(System.in);
+        System.out.println("What do you want to do? ");
         System.out.println("\t1. Add task: ");
         System.out.println("\t2. Edit task by id: ");
         System.out.println("\t3. Delete task by id: ");
-        System.out.println("\t4. Edit or add date: ");
-        System.out.println("\t5. Show tasks that are pending or passed: ");
-        System.out.print("What do you want to do? ");
+        System.out.println("\t4. Show tasks that are pending or passed (by username):");
+        System.out.println("\t5. Show tasks that are pending or passed (all of them by list):");
         int option = sc.nextInt();
 
         switch (option) {
@@ -25,10 +26,10 @@ public class TaskMenu {
                 Controller.deleteTask();
                 break;
             case 4:
-                Controller.editDate();
+                Controller.pendingTasks();
                 break;
             case 5:
-                Controller.pendingTasks();
+                System.out.println(Controller.getPendingTasks());
                 break;
             default:
                 System.out.println("Invalid option, try again!");
