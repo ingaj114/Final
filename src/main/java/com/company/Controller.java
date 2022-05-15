@@ -22,7 +22,7 @@ public class Controller {
         System.out.print("Enter to do list's task: ");
         String task = scanner.nextLine();
         System.out.print("Enter date to accomplish (yyyy-mm-dd): ");
-        String deadline= scanner.nextLine();
+        String deadline = scanner.nextLine();
         System.out.print("Finished or not finished (yes/no) ? ");
         String accomplish = scanner.nextLine();
 
@@ -132,7 +132,7 @@ public class Controller {
         }
     }
 
-    public static List<TaskObject> pendingTasks() {
+    public static TaskObject pendingTasks() {
 
         Date today = Date.valueOf(LocalDate.now());
         LocalDate today2 = LocalDate.now();
