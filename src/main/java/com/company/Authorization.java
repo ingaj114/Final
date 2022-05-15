@@ -53,7 +53,7 @@ public class Authorization {
                     System.out.println("Login successful!");
                     TaskMenu.menu();
                     return true;
-                } else if (usernameObj.equals(username) && !passwordObj.equals(password)) {
+                } else if (usernameObj.equalsIgnoreCase(username) && !passwordObj.equals(password)) {
                     System.out.println("Password does not match the username. Try again!");
                     Authorization.login();
                     return false;
