@@ -141,6 +141,7 @@ public class Controller {
             ps = getConnection().prepareStatement("SELECT id, task, deadline, acomplishment FROM todolist WHERE username='" + username + "'");
             rs = ps.executeQuery();
 
+            System.out.println("Pending or passed without fulfilment:");
             while (rs.next()) {
                 Date date = rs.getDate(3);
                 LocalDate date2 = rs.getDate(3).toLocalDate();
