@@ -147,11 +147,11 @@ public class Controller {
                 String task = rs.getString(2);
                 Period diff = Period.between(today2, date2);
                 if (date.equals(today) && rs.getString(4).equals("f")) {
-                    System.out.println("Task " + task.toUpperCase() + " have to be done today.");
+                    System.out.println("Task " + task.toUpperCase() + " has to be done today.");
                 } else if (date.after(today) && rs.getString(4).equals("f")) {
-                    System.out.println("Task " + task.toUpperCase() + " have to be done within " + diff.getDays() + " day/-s " + "(" + date +").");
+                    System.out.println("Task " + task.toUpperCase() + "has to be done within " + diff.getDays() + " day/-s " + "(" + date +").");
                 } else if (date.before(today) && rs.getString(4).equals("f")) {
-                    System.out.println("Task " + task.toUpperCase() + " have been passed " + "in " + Math.abs(diff.getDays()) + " day/-s" + " (" + date + ").");
+                    System.out.println("Task " + task.toUpperCase() + " passed " + Math.abs(diff.getDays()) + " day/-s ago" + " (" + date + ").");
                 }
             }
         } catch (SQLException e) {
@@ -162,7 +162,7 @@ public class Controller {
     public static List<TaskObject> getPendingTasks() {
 
         try {
-            ps = getConnection().prepareStatement("SELECT * FROM todolist WHERE deadline > NOW() AND acomplishment is false;");
+            ps = getConnection().prepareStatement("SELECT * FROM todolist WHERE deadline >= NOW() AND acomplishment is false;");
             rs = ps.executeQuery();
 
             List<TaskObject> pendingTasks = new ArrayList<>();
